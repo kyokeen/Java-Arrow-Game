@@ -1,18 +1,12 @@
 package Controller;
 
 import Model.*;
-import Model.Strategies.MinMaxStrategy;
 import Model.Strategies.RandomStrategy;
 import View.BoardObserver;
-import View.LanguageObserver;
-import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.event.EventTarget;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -23,9 +17,6 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
-import java.util.Locale;
-import java.util.ResourceBundle;
 
 public class Controller {
     public ChoiceBox<String> colorSelectChoiceBox;
@@ -65,7 +56,6 @@ public class Controller {
         //model.getSystemPlayer().setStrategy(new MinMaxStrategy(2, 10));
         model.getSystemPlayer().setStrategy(new RandomStrategy());
         model.setBoardObserver(new BoardObserver(this));
-        Language.setController(this);
 
         setButtonImages("g");
         loadChoiceBoxes();

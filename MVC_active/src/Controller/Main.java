@@ -28,8 +28,7 @@ public class Main extends Application{
         primaryStage.show();
     }
 
-    public static void main(String[] args) throws InterruptedException {
-        //pplication.launch(Controller.class, args);
+    public static void main(String[] args) {
         launch(args);
     }
 }

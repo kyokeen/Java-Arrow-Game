@@ -1,6 +1,5 @@
 package Controller;
 
-import View.LanguageObserver;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXMLLoader;
@@ -11,10 +10,9 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.*;
 
-public class Language extends Observable {
-    private static ObjectProperty<Locale> locale;
+public class Language {
+    private static final ObjectProperty<Locale> locale;
     private static final ArrayList<Locale> supportedLocales = new ArrayList<>();
-    private static Controller controller;
 
     public static final Locale ROMANIAN = new Locale("ro");
     public static final Locale ENGLISH = new Locale("en");
@@ -22,16 +20,12 @@ public class Language extends Observable {
     public static final Locale SPANISH = new Locale("esp");
 
     static {
+        supportedLocales.add(ROMANIAN);
+        supportedLocales.add(ENGLISH);
+        supportedLocales.add(FRENCH);
+        supportedLocales.add(SPANISH);
+
         locale = new SimpleObjectProperty<>(ROMANIAN);
-        locale.addListener(((observableValue, oldValue, newValue) -> Locale.setDefault(newValue)));
-    }
-
-    public static List<Locale> getSupportedLocales() {
-        return supportedLocales;
-    }
-
-    public static Locale getLocale() {
-        return locale.get();
     }
 
     public static ObjectProperty<Locale> localeProperty() {
@@ -39,6 +33,9 @@ public class Language extends Observable {
     }
 
     public static void setLocale(Locale locale, Controller controller) {
+        if (!supportedLocales.contains(locale)) {
+            return;
+        }
         localeProperty().set(locale);
         Locale.setDefault(locale);
 
@@ -47,19 +44,14 @@ public class Language extends Observable {
         FXMLLoader loader = new FXMLLoader(controller.getClass().getClassLoader().getResource("View/sample.fxml"));
         loader.setResources(ResourceBundle.getBundle("View.lang", locale));
 
-        Parent root = null;
+        Parent root;
         try {
             root = loader.load();
+            ((Controller)loader.getController()).setStage(stage);
+            stage.setScene(new Scene(root, 700, 400));
+            stage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        ((Controller)loader.getController()).setStage(stage);
-        stage.setScene(new Scene(root, 700, 400));
-        stage.show();
     }
-
-    public static void setController(Controller cnt) {
-        controller = cnt;
-    }
-
 }
