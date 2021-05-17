@@ -12,6 +12,7 @@ import java.util.*;
 
 public class Language {
     private static final ObjectProperty<Locale> locale;
+    private static ResourceBundle bundle;
     private static final ArrayList<Locale> supportedLocales = new ArrayList<>();
 
     public static final Locale ROMANIAN = new Locale("ro");
@@ -26,6 +27,7 @@ public class Language {
         supportedLocales.add(SPANISH);
 
         locale = new SimpleObjectProperty<>(ROMANIAN);
+        bundle = ResourceBundle.getBundle("View.lang", ROMANIAN);
     }
 
     public static ObjectProperty<Locale> localeProperty() {
@@ -42,7 +44,8 @@ public class Language {
         Stage stage = controller.getStage();
         stage.hide();
         FXMLLoader loader = new FXMLLoader(controller.getClass().getClassLoader().getResource("View/sample.fxml"));
-        loader.setResources(ResourceBundle.getBundle("View.lang", locale));
+        bundle = ResourceBundle.getBundle("View.lang", locale);
+        loader.setResources(bundle);
 
         Parent root;
         try {
@@ -53,5 +56,9 @@ public class Language {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static ResourceBundle getBundle() {
+        return bundle;
     }
 }

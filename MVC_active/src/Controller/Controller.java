@@ -69,7 +69,11 @@ public class Controller {
         buttonLangESP.setOnAction(actionEvent -> Language.setLocale(Language.SPANISH, this));
 
         colorSelectChoiceBox.valueProperty().addListener(((observableValue, oldValue, newValue) -> {
-            chosenColor = newValue.toLowerCase().charAt(0) + "";
+            if(newValue.equals(Language.getBundle().getString("ui.color.red"))) {
+                chosenColor = "r";
+            } else {
+                chosenColor = "g";
+            }
             setButtonImages(chosenColor);
             model.getSystemPlayer().setColor(model.getUserPlayer().getColor());
             model.getUserPlayer().setColor(chosenColor);
@@ -119,8 +123,10 @@ public class Controller {
     }
 
     private void loadChoiceBoxes() {
-        colorSelectChoiceBox.setValue("Green");
-        colorSelectChoiceBox.setItems(FXCollections.observableArrayList("Red", "Green"));
+        colorSelectChoiceBox.setValue(Language.getBundle().getString("ui.color.green"));
+        colorSelectChoiceBox.setItems(FXCollections.observableArrayList(
+                Language.getBundle().getString("ui.color.green"),
+                Language.getBundle().getString("ui.color.red")));
         levelSelectChoiceBox.setValue("4x4");
         levelSelectChoiceBox.setItems(FXCollections.observableArrayList("4x4", "8x8"));
     }
@@ -131,14 +137,16 @@ public class Controller {
 
     public void signalEndgame(String winner) {
         final Stage dialog = new Stage();
-        dialog.setTitle("Game end.");
+        dialog.setTitle(Language.getBundle().getString("ui.dialog.endgame"));
         dialog.setX(950);
         dialog.setY(300);
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.centerOnScreen();
         VBox dialogVbox = new VBox(20);
         dialogVbox.setAlignment(Pos.CENTER);
-        dialogVbox.getChildren().add(new Text("No more possible moves. \n " + winner + " wins!"));
+        dialogVbox.getChildren().add(new Text(
+                Language.getBundle().getString("ui.dialog.endgame") + " \n " + winner + " " +
+                Language.getBundle().getString("ui.dialog.over")));
         Scene dialogScene = new Scene(dialogVbox, 150, 100);
         dialogVbox.setOnMouseClicked(mouseEvent -> {
             dialog.close();
@@ -157,7 +165,7 @@ public class Controller {
         dialog.centerOnScreen();
         VBox dialogVbox = new VBox(20);
         dialogVbox.setAlignment(Pos.CENTER);
-        dialogVbox.getChildren().add(new Text("Invalid move!"));
+        dialogVbox.getChildren().add(new Text(Language.getBundle().getString("ui.dialog.invalidmove")));
         Scene dialogScene = new Scene(dialogVbox, 150, 100);
         dialogVbox.setOnMouseClicked(mouseEvent -> dialog.close());
         dialog.setScene(dialogScene);
